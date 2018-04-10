@@ -19,8 +19,9 @@ class App extends Component {
 
   onPress = (octave, keyNames) => {
     this.props.checkAnswer(keyNames).then((data) => {
-      console.log(data);
+      this.setState({currentNote: data.note});
     });
+    
   }
 
   getNote() {

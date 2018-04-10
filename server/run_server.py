@@ -3,7 +3,7 @@ from flask import Flask, request, render_template, send_from_directory, jsonify
 app = Flask(__name__, static_folder=None)
 
 CLIENT_FOLDER = os.path.abspath('../client/build')
-default_sequence = ['Bb','A','D','E','F#','G','Ab']
+default_sequence = ['C#','A','D','E','F#','G','Ab']
 
 class Notes:
 
@@ -23,10 +23,10 @@ class Notes:
     def record_result(self,note_played):
         #position is 1 further than result table
         #as we move the position in the next_note method
-        print(self.position)
-        #result_position = self.position-1
-        #self.results[result_position] = (self.notes[result_position] in note_played) 
-
+        if self.notes[self.position-1] in note_played:
+            self.results.append(True)
+        else:
+            self.results.append(False)    
 test = Notes()
 
 @app.route('/')
@@ -39,11 +39,15 @@ def note():
 
     if request.method == 'POST':
         notes = request.get_json()
-
         test.record_result(notes)
 
+    #finished all notes, now display to user?
+    if (test.end()):
+        test.position = 0
+        test.results.clear()
     
     result = {'note': test.next_note()}
+
     print(test.results)
     print(result)
 
