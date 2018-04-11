@@ -25,8 +25,10 @@ class Notes:
         #as we move the position in the next_note method
         if self.notes[self.position-1] in note_played:
             self.results.append(True)
+            return True
         else:
             self.results.append(False)    
+            return False
 test = Notes()
 
 @app.route('/')
@@ -39,14 +41,16 @@ def note():
 
     if request.method == 'POST':
         notes = request.get_json()
-        test.record_result(notes)
+        result = test.record_result(notes)
 
-    #finished all notes, now display to user?
-    if (test.end()):
-        test.position = 0
-        test.results.clear()
-    
-    result = {'note': test.next_note()}
+    else: #req method = GET, send next note
+        #but first check if there are still notes to get
+        if (test.end()):
+            test.position = 0
+            test.results.clear()
+            
+        #send next note since get request
+        result = {'note': test.next_note()}
 
     print(test.results)
     print(result)

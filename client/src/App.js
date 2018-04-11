@@ -7,7 +7,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentNote: null
+      currentNote: null,
+      feedback: ""
     }
 
     this.props.fetchNextNote().then((data) => {
@@ -19,9 +20,16 @@ class App extends Component {
 
   onPress = (octave, keyNames) => {
     this.props.checkAnswer(keyNames).then((data) => {
-      this.setState({currentNote: data.note});
+      if(data){
+        this.setState({feedback: "Correct!"});
+        this.props.fetchNextNote().then((data) => {
+          this.setState({currentNote: data.note});  
+        });
+      }
+      else{
+        this.setState({feedback: "Try Again ):"});
+      }
     });
-    
   }
 
   getNote() {
@@ -46,6 +54,7 @@ class App extends Component {
           numOctaves={3}
           onPress={this.onPress}
         />
+        <h1>{this.state.feedback}</h1>
       </div>
     );
   }
