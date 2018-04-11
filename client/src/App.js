@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Piano from './Piano.js';
+import Results from './Results.js';
 
 import './App.css';
 
@@ -8,7 +9,9 @@ class App extends Component {
     super(props);
     this.state = {
       currentNote: null,
-      feedback: ""
+      feedback: "",
+      correct: null,
+      total: null
     }
 
     this.props.fetchNextNote().then((data) => {
@@ -22,9 +25,16 @@ class App extends Component {
     this.props.checkAnswer(keyNames).then((data) => {
       if(data){
         this.setState({feedback: "Correct!"});
+    
         this.props.fetchNextNote().then((data) => {
+          if(data.note == "Done!"){
+            this.setState({correct: data.correct});
+            this.setState({total: data.total});
+          }
           this.setState({currentNote: data.note});  
         });
+
+
       }
       else{
         this.setState({feedback: "Try Again ):"});
@@ -50,12 +60,23 @@ class App extends Component {
           }
           When a note appears above, play the corresponding note on the piano keyboard.
         </header>
-        <Piano
-          numOctaves={3}
-          onPress={this.onPress}
-        />
-        <h1>{this.state.feedback}</h1>
-      </div>
+        {
+          this.state.currentNote != "Done!" ? 
+            <div>
+              <Piano
+                numOctaves={3}
+                onPress={this.onPress}
+              />
+              <h1>{this.state.feedback}</h1>
+            </div>
+          :
+            <Results
+              correct={this.state.correct}
+              total={this.state.total}
+            />
+        }
+
+        </div>
     );
   }
 }

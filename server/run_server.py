@@ -1,9 +1,11 @@
 import os
-from flask import Flask, request, render_template, send_from_directory, jsonify
+from flask import Flask, request, render_template, send_from_directory, jsonify, make_response
+from uuid import uuid4
 app = Flask(__name__, static_folder=None)
 
 CLIENT_FOLDER = os.path.abspath('../client/build')
 default_sequence = ['C#','A','D','E','F#','G','Ab']
+#default_sequence = ['C#']
 
 class Notes:
 
@@ -29,33 +31,53 @@ class Notes:
         else:
             self.results.append(False)    
             return False
+    def final_stats(self):
+        return {'note':'Done!','correct':len(self.notes),'total':len(self.results)}
+
+#where the data for notes will be stored  
 test = Notes()
+userDictionary = {}
 
 @app.route('/')
 def welcome():
-    return render_template('welcome.html')
+    sessionID = str
+    resp = make_response(render_template('welcome.html'))
+    resp.set_cookie('sessionID',sessionID)
+    resp.set_cookie('username','anuraag')
+    userDictionary[sessionID] = Notes()
+    return resp
+
+
+
 
 @app.route('/note', methods=['GET', 'POST'])
 def note():
+
+    id = request.cookies.get('sessionID')
+    print(request.cookies.get('username'))
+    print(id)
+    print(request.cookies)
+    print("VVCONFUSED???")
+    currentUser = test
     result = None
 
+    #if req method = post, it wants to check if note clicked is correct
     if request.method == 'POST':
         notes = request.get_json()
-        result = test.record_result(notes)
+        result = currentUser.record_result(notes)
 
-    else: #req method = GET, send next note
+    else: 
+        #req method = GET therefore wants next note
         #but first check if there are still notes to get
-        if (test.end()):
-            test.position = 0
-            test.results.clear()
-            
-        #send next note since get request
-        result = {'note': test.next_note()}
+        #return end string if complete
+        if (currentUser.end()):
+            return jsonify(currentUser.final_stats())
 
-    print(test.results)
-    print(result)
+        #else send next note
+        result = {'note': currentUser.next_note()}
 
     return jsonify(result)
+
 
 @app.route('/piano/', methods=['GET'])
 def serve_app():
