@@ -12,7 +12,6 @@ dbPath = os.path.abspath('piano.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + dbPath
 #disable event system, reduces overhead 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
-
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -22,42 +21,6 @@ class User(db.Model):
 
     def __repr__(self):
         return self.username
-
-default_sequence = ['C#','A','D','E','F#','G','Ab']
-#default_sequence = ['C#']
-
-class Notes:
-    def __init__(self):
-        self.position = 0
-        self.notes = default_sequence
-        self.results = []
-
-    def end(self):
-        return self.position == len(self.notes)
-    
-    def next_note(self):
-        return_note = self.notes[self.position]
-        return return_note
-
-    def record_result(self,note_played):
-        if self.notes[self.position] in note_played:
-            self.results.append(True)
-            #move forward when correct note is played
-            self.position += 1
-            return True
-        else:
-            self.results.append(False)    
-            return False
-
-    def final_stats(self):
-        return {'note':'Done!','correct':len(self.notes),'total':len(self.results)}
-
-    def restart(self):
-        self.position = 0
-        self.results.clear()
-
-    def last_element(self):
-        return self.results[-1]
 
 #where the state of the program will be stored
 #for when users log in then log out
