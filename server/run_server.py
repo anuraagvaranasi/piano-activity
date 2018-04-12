@@ -26,14 +26,16 @@ class User(db.Model):
 #for when users log in then log out
 userDictionary = {}
 
-#login to piano app, also stores state if logged in before and wasnt completed
+
+#----First we have the login and register pages
+#----Since they are the first thing the user sees
+#login to piano app
 @app.route('/', methods=['GET','POST'])
 def login():
     if request.method == 'GET': #GET = display login page
         return render_template('welcome.html')
 
     else: #POST, read login information
-        print(request.form)
         user = request.form['username']
         pwd = request.form['password']
 
@@ -44,8 +46,8 @@ def login():
             if user not in userDictionary:
                 userDictionary[user] = Notes()
             return resp
-
         else:
+            #login failed, return login page but with an error for user
             return render_template('welcome.html',incorrect=True)
 
 #register a new user
@@ -58,7 +60,14 @@ def register():
             #succesfully registered, redirect to login page
             return redirect(url_for('login'))
         else:
+            #redirect to same page but with an error for user
             return render_template('register.html',incorrect=True)
+
+
+
+
+#----Database and related functions under here, can change backend as  
+#----long as it does the same thing and returns the same results
 
 #get sha256 hash of a string to store/compare password
 #since we should never store password in plaintext
@@ -84,9 +93,9 @@ def register_user(user,pwd):
         db.session.commit()
         return True
     else:
-        print("cannot register user " + user)
         return False
 
+#----Actual routes to react app here
 @app.route('/note', methods=['GET', 'POST'])
 def note():
     currentUser = userDictionary[request.cookies.get('username')]
@@ -118,6 +127,8 @@ def serve_static(path):
     print(path)
     return send_from_directory(CLIENT_FOLDER, path)
 
+
+#to run the actual flask app
 if __name__ == "__main__":
     app.debug = True
     app.run()
