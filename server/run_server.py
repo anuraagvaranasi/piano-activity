@@ -34,7 +34,13 @@ userDictionary = {}
 @app.route('/', methods=['GET','POST'])
 def login():
     if request.method == 'GET': #GET = display login page
-        return render_template('welcome.html')
+        #if user is already logged in, send directly to app
+        if 'username' in request.cookies:
+            add_object(request.cookies['username'])
+            return send_from_directory(CLIENT_FOLDER, 'index.html')
+        #go to login page if not
+        else:
+            return render_template('welcome.html')
 
     else: #POST, read login information
         user = request.form['username']
@@ -44,8 +50,7 @@ def login():
             resp = make_response(send_from_directory(CLIENT_FOLDER, 'index.html'))
             resp.set_cookie('username',user)
             #create a new class only if it doesnt exist already
-            if user not in userDictionary:
-                userDictionary[user] = Notes()
+            add_object(user)
             return resp
         else:
             #login failed, return login page but with an error for user
@@ -64,7 +69,10 @@ def register():
             #redirect to same page but with an error for user
             return render_template('register.html',incorrect=True)
 
-
+#add object to userDict if not already there
+def add_object(user):
+    if user not in userDictionary:
+                userDictionary[user] = Notes()
 
 
 #----Database and related functions under here, can change backend as  
