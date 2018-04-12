@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, render_template, send_from_directory,\
  jsonify, make_response,url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
+from notes import Notes
 import hashlib
 
 app = Flask(__name__, static_folder=None)
