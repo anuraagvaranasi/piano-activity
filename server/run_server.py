@@ -4,9 +4,6 @@ from flask import Flask, request, render_template, send_from_directory,\
 from flask_sqlalchemy import SQLAlchemy
 import hashlib
 
-
-
-
 app = Flask(__name__, static_folder=None)
 CLIENT_FOLDER = os.path.abspath('../client/build')
 
@@ -40,14 +37,13 @@ class Notes:
     
     def next_note(self):
         return_note = self.notes[self.position]
-        self.position += 1
         return return_note
 
     def record_result(self,note_played):
-        #position is 1 further than result table
-        #as we move the position in the next_note method
-        if self.notes[self.position-1] in note_played:
+        if self.notes[self.position] in note_played:
             self.results.append(True)
+            #move forward when correct note is played
+            self.position += 1
             return True
         else:
             self.results.append(False)    
