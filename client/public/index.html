@@ -36,6 +36,19 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <button onClick=logout()>Logout</button>
   </body>
+
+  <script>
+    function logout(){
+      document.cookie = 'username=;expires=Thu,01 Jan 1970 00:00:01 GMT;';
+      var form = document.createElement("form");
+      form.setAttribute("method","get");
+      form.setAttribute("action","/");
+      document.body.appendChild(form);
+      form.submit();
+    };
+
+  </script>
 
 </html>
