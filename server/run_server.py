@@ -4,6 +4,7 @@ from flask import Flask, request, render_template, send_from_directory,\
 from flask_sqlalchemy import SQLAlchemy
 from notes import Notes
 import hashlib
+import re
 
 app = Flask(__name__, static_folder=None)
 CLIENT_FOLDER = os.path.abspath('../client/build')
@@ -104,7 +105,39 @@ def register_user(user,pwd):
     else:
         return False
 
-#----Actual routes to react app here
+#----Actual routes related to react app here
+
+#allows user to send in own sequence of notes to play
+@app.route('/newSeq',methods=['POST'])
+def newSeq():
+    seq = request.get_json()
+    #if sequence is correct format, change state of userDict class
+    if match(seq):
+        user = request.cookies['username']
+        userDictionary[user] = Notes(str.split(seq))
+        curState = userDictionary[user]
+        return jsonify(curState.next_note())
+    #tell app that it wasnt correct format
+    else:
+        return jsonify("error")
+
+#check if a sequence is in correct format(spaces between notes doesnt matter)
+def match(seq):
+    #make sure it has some elements in it
+    if seq.replace(" ","") == "":
+        return False
+        
+    split_str = str.split(seq)
+    regex = r"^[ABCDEFG][#b]?$"
+    #check if each element in it is in the correct format
+    for x in split_str:
+        match = re.search(regex,x)
+        if match is None:
+            return False
+    
+    return True
+
+
 @app.route('/note', methods=['GET', 'POST'])
 def note():
     currentUser = userDictionary[request.cookies.get('username')]
@@ -135,7 +168,6 @@ def note():
 def serve_static(path):
     print(path)
     return send_from_directory(CLIENT_FOLDER, path)
-
 
 #to run the actual flask app
 if __name__ == "__main__":

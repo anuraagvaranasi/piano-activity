@@ -33,8 +33,6 @@ class App extends Component {
           }
           this.setState({currentNote: data.note});  
         });
-
-
       }
       else{
         this.setState({feedback: "Try Again ):"});
@@ -42,9 +40,29 @@ class App extends Component {
     });
   }
 
+  sendOwnSequence(event){
+    var seq = prompt("Enter Your own sequence, seperated by spaces");
+    this.props.sendSeq(seq).then((data) => {
+      if(data != "error"){
+        this.setState({currentNote: data});
+        this.setState({feedback: ""});
+      }
+      else{
+        alert("Sequence wasn't in correct format");
+      }
+    });
+  }
+
   getNote() {
     return this.state.currentNote.replace('#', '♯').replace('b', '♭');
   }
+
+  reset(event){
+    this.setState({feedback: ""});
+    window.location.reload();
+  }
+
+  
 
   render() {
     return (
@@ -70,12 +88,15 @@ class App extends Component {
               <h1>{this.state.feedback}</h1>
             </div>
           :
-            <Results
-              correct={this.state.correct}
-              total={this.state.total}
-            />
+            <div>
+              <Results
+                correct={this.state.correct}
+                total={this.state.total}
+              />
+              <button type="button" onClick={this.reset.bind(this)}>Reset</button>
+            </div>
         }
-
+        <button type="button" onClick={this.sendOwnSequence.bind(this)}>Send Own Notes</button>
         </div>
     );
   }

@@ -1,8 +1,7 @@
-default_sequence = ['C#','A','D','E','F#','G','Ab']
-
+#class for data about the sequence of notess
 class Notes:
     #given sequence defaults to above if not inputted
-    def __init__(self,given_sequence=default_sequence):
+    def __init__(self,given_sequence=['C#','A','D','E','F#','G','Ab']):
         self.position = 0
         self.notes = given_sequence
         self.results = []
@@ -30,6 +29,3 @@ class Notes:
     def restart(self):
         self.position = 0
         self.results.clear()
-
-    def last_element(self):
-        return self.results[-1]
