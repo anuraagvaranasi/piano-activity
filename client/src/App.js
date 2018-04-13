@@ -97,7 +97,7 @@ class App extends Component {
               
             </div>
         }
-        <button type="button" className = "button" onClick={this.sendOwnSequence.bind(this)}>Send Own Notes</button>
+        <br/><button type="button" className = "button" onClick={this.sendOwnSequence.bind(this)}>Play Own Notes</button>
         </div>
     );
   }

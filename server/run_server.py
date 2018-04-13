@@ -127,6 +127,8 @@ def newSeq():
 #check if a sequence is in correct format(spaces between notes doesnt matter)
 def match(seq):
     #make sure it has some elements in it
+    if seq is None:
+        return False
     if seq.replace(" ","") == "":
         return False
         
