@@ -94,6 +94,7 @@ class App extends Component {
                 total={this.state.total}
               />
               <button type="button" onClick={this.reset.bind(this)}>Reset</button>
+              
             </div>
         }
         <button type="button" onClick={this.sendOwnSequence.bind(this)}>Send Own Notes</button>
