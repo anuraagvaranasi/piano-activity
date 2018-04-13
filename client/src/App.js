@@ -93,11 +93,11 @@ class App extends Component {
                 correct={this.state.correct}
                 total={this.state.total}
               />
-              <button type="button" onClick={this.reset.bind(this)}>Reset</button>
+              <button type="button" className = "button" onClick={this.reset.bind(this)}>Reset</button>
               
             </div>
         }
-        <button type="button" onClick={this.sendOwnSequence.bind(this)}>Send Own Notes</button>
+        <button type="button" className = "button" onClick={this.sendOwnSequence.bind(this)}>Send Own Notes</button>
         </div>
     );
   }
