@@ -34,3 +34,13 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.button {
+  background-color: #e7e7e7;
+  color: black;
+  border: none;
+  padding: 15px 30px;
+  text-align: centre;
+  display: inline-block;
+  font-size: 15px;
+}
