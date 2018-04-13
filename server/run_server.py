@@ -8,6 +8,9 @@ import re
 
 app = Flask(__name__, static_folder=None)
 CLIENT_FOLDER = os.path.abspath('../client/build')
+CSS_FOLDER = os.path.abspath('css')
+
+print(CSS_FOLDER)
 
 #database stuff
 dbPath = os.path.abspath('piano.db')
@@ -166,8 +169,11 @@ def note():
 
 @app.route('/<path:path>', methods=['GET'])
 def serve_static(path):
-    print(path)
     return send_from_directory(CLIENT_FOLDER, path)
+
+@app.route('/css/<path:path>', methods=['GET'])
+def serve_css(path):
+    return send_from_directory(CSS_FOLDER, path)
 
 #to run the actual flask app
 if __name__ == "__main__":
