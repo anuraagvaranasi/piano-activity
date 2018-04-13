@@ -3,30 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <title></title>
-
-  <style media="screen">
-    body {
-        font-family: sans-serif
-    }
-  </style>
-
+  <link rel="stylesheet" type="text/css" href={{url_for('static',filename='forms.css')}}>
 </head>
 <body>
-    <h1>Welcome</h1>
-    <form action='/' method = "post">
-      <label for="username"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="username" required>
-      <br>
-      <label for="password"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="password" required>
-      <br>
-      <button type="submit">Login</button>
-    </form>
-    <a href={{ url_for('register') }}>Register!</a><br><br>
+    <div class="card">
+      <h1>Welcome</h1>
+      <form action='/' method = "post">
+        <input type="text" placeholder="Username" name="username" required>
+        <input type="password" placeholder="Password" name="password" required>
+        <br>
+        <button type="submit">Login</button>
+        <a href={{ url_for('register') }}>Register!</a><br>
+      </form>
+      {% if incorrect %}
+        <h3>Login Incorrect, try again!</h3>
+      {% endif %}
+    </div>
 
-    {% if incorrect %}
-      <h3>Login Incorrect, try again!</h3>
-    {% endif %}
-    <a href="piano/">Start the activity here</a>
+    
 </body>
 </html>

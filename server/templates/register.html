@@ -3,30 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <title></title>
-
-  <style media="screen">
-    body {
-        font-family: sans-serif
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href={{url_for('static',filename='forms.css')}}>
 
 </head>
-<body>
-    <h1>Register!</h1>
-    <form action='register' method = "post">
-      <label for="username"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="username" required>
-      <br>
-      <label for="password"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="password" required>
-      <br>
-      <button type="submit">Register</button>
-    </form><br>
+  <body>
+    <div class="card">
+      <h1>Register!</h1>
+      <form action='register' method = "post">
+        <label for="username"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="username" required>
+        <br>
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+        <br>
+        <button type="submit">Register</button>
+        <a href={{ url_for('login') }}>Login!</a><br><br>      
+      </form><br>
 
-    {% if incorrect %}
-      <h3>User already exists, try another username!</h3>
-    {% endif %}
+      {% if incorrect %}
+        <h3>User already exists, try another username!</h3>
+      {% endif %}
 
-    <a href={{ url_for('login') }}>Login!</a><br><br>
-</body>
+    </div>
+  </body>
 </html>
